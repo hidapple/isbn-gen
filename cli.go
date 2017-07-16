@@ -17,8 +17,8 @@ type CLI struct {
 
 func (cli *CLI) Run(args []string) int {
 	var (
-    pubcode int
-		p int
+		pubcode int
+		p       int
 		version bool
 	)
 
