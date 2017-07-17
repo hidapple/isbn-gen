@@ -17,8 +17,7 @@ type CLI struct {
 
 func (cli *CLI) Run(args []string) int {
 	var (
-		pubcode int
-		p       int
+		pubcode string
 		version bool
 	)
 
@@ -26,8 +25,8 @@ func (cli *CLI) Run(args []string) int {
 	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
 	flags.SetOutput(cli.errStream)
 
-	flags.IntVar(&pubcode, "pubcode", 0, "Publisher code")
-	flags.IntVar(&p, "p", 0, "Publisher code(Short)")
+	flags.StringVar(&pubcode, "-pubcode", "0", "Publisher code of ISBN")
+	flags.StringVar(&pubcode, "p", "0", "Publisher code of ISBN (Short)")
 
 	flags.BoolVar(&version, "version", false, "Print version information and quit.")
 
@@ -42,7 +41,14 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-	_ = p
+  // Generate ISBN
+  isbn := generate(pubcode)
+  fmt.Print(isbn);
 
 	return ExitCodeOK
+}
+
+func generate(pubcode string) string {
+  const JapanIsbnPrefix = "9784"
+  return JapanIsbnPrefix + pubcode
 }
