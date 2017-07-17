@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"math/rand"
+	"strconv"
 )
 
 const (
@@ -41,14 +43,19 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-  // Generate ISBN
-  isbn := generate(pubcode)
-  fmt.Print(isbn);
+	// Generate ISBN
+	isbn := generate(pubcode)
+	fmt.Print(isbn)
 
 	return ExitCodeOK
 }
 
 func generate(pubcode string) string {
-  const JapanIsbnPrefix = "9784"
-  return JapanIsbnPrefix + pubcode
+	const JapanIsbnPrefix = "9784"
+	isbn := JapanIsbnPrefix + pubcode
+	length := 8 - len(pubcode)
+	for i := 0; i < length; i++ {
+		isbn += strconv.Itoa(rand.Intn(10))
+	}
+	return isbn
 }
