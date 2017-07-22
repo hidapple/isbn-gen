@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
+  "time"
 	"strconv"
 	"strings"
 )
@@ -53,11 +54,13 @@ func (cli *CLI) Run(args []string) int {
 
 func generate(pubcode string) string {
 	isbn := generate12digit(pubcode)
-	return isbn + strconv.Itoa(calcCheckDigit(isbn))
+	return isbn + calcCheckDigit(isbn)
 }
 
 func generate12digit(pubcode string) string {
 	const JapanIsbnPrefix = "9784"
+  rand.Seed(time.Now().UnixNano())
+
 	isbn := JapanIsbnPrefix + pubcode
 	length := 8 - len(pubcode)
 	for i := 0; i < length; i++ {
@@ -66,7 +69,7 @@ func generate12digit(pubcode string) string {
 	return isbn
 }
 
-func calcCheckDigit(partOfIsbn string) int {
+func calcCheckDigit(partOfIsbn string) string {
 	sum := 0
 	for i, v := range strings.Split(partOfIsbn, "") {
 		intV, _ := strconv.Atoi(v)
@@ -79,8 +82,8 @@ func calcCheckDigit(partOfIsbn string) int {
 
 	calcResult := 10 - (sum % 10)
 	if calcResult == 10 {
-		return 0
+		return "0"
 	} else {
-		return calcResult
+		return strconv.Itoa(calcResult)
 	}
 }
