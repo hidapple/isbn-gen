@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
-  "time"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -59,7 +59,7 @@ func generate(pubcode string) string {
 
 func generate12digit(pubcode string) string {
 	const JapanIsbnPrefix = "9784"
-  rand.Seed(time.Now().UnixNano())
+	rand.Seed(time.Now().UnixNano())
 
 	isbn := JapanIsbnPrefix + pubcode
 	length := 8 - len(pubcode)
