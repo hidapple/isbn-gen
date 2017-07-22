@@ -53,17 +53,17 @@ func (cli *CLI) Run(args []string) int {
 }
 
 func generate(pubcode string) string {
-	isbn := generate12digit(pubcode)
+	isbn := generate12digits(pubcode)
 	return isbn + calcCheckDigit(isbn)
 }
 
-func generate12digit(pubcode string) string {
-	const JapanIsbnPrefix = "9784"
+func generate12digits(pubcode string) string {
+	const JapanCode = "9784"
 	rand.Seed(time.Now().UnixNano())
 
-	isbn := JapanIsbnPrefix + pubcode
-	length := 8 - len(pubcode)
-	for i := 0; i < length; i++ {
+	isbn := JapanCode + pubcode
+	rest := 8 - len(pubcode)
+	for i := 0; i < rest; i++ {
 		isbn += strconv.Itoa(rand.Intn(10))
 	}
 	return isbn
@@ -75,7 +75,7 @@ func calcCheckDigit(partOfIsbn string) string {
 		intV, _ := strconv.Atoi(v)
 		if i%2 == 0 {
 			sum += intV
-		} else if i%2 == 1 {
+		} else {
 			sum += intV * 3
 		}
 	}
