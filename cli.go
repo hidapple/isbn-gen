@@ -29,10 +29,11 @@ func (cli *CLI) Run(args []string) int {
 	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
 	flags.SetOutput(cli.errStream)
 
-	flags.StringVar(&pubcode, "pubcode", "0", "Publisher code of ISBN")
-	flags.StringVar(&pubcode, "p", "0", "Publisher code of ISBN (Short)")
+	flags.StringVar(&pubcode, "pubcode", "", "Publisher code of ISBN.")
+	flags.StringVar(&pubcode, "p", "", "Publisher code of ISBN (Short).")
 
 	flags.BoolVar(&version, "version", false, "Print version information and quit.")
+	flags.BoolVar(&version, "v", false, "Print version information and quit (Short).")
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
@@ -46,7 +47,7 @@ func (cli *CLI) Run(args []string) int {
 	}
 
 	// Generate ISBN
-	fmt.Println(generate(pubcode))
+	fmt.Fprintln(cli.outStream, generate(pubcode))
 
 	// Succeeded
 	return ExitCodeOK
