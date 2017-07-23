@@ -47,15 +47,31 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-	// Generate ISBN
-	if len(pubcode) > 8 {
-		fmt.Fprintln(cli.errStream, "Option -pubcode(-p) should be less than 8 digits.")
+	// Validate option: pubcode
+	if !isNumber(pubcode) {
+		fmt.Fprintf(cli.errStream, "%s: pubcode must be number: %s\n", Name, pubcode)
 		return ExitCodeError
 	}
+	if len(pubcode) > 8 {
+		fmt.Fprintf(cli.errStream, "%s: pubcode must be less than 8 digits: %s\n", Name, pubcode)
+		return ExitCodeError
+	}
+
+	// Generate ISBN
 	fmt.Fprintln(cli.outStream, generate(pubcode))
 
 	// Succeeded
 	return ExitCodeOK
+}
+
+func isNumber(pubcode string) bool {
+	if len(pubcode) == 0 {
+		return true
+	}
+	if _, err := strconv.Atoi(pubcode); err != nil {
+		return false
+	}
+	return true
 }
 
 func generate(pubcode string) string {
@@ -75,9 +91,9 @@ func generate12digits(pubcode string) string {
 	return isbn
 }
 
-func calcCheckDigit(partOfIsbn string) string {
+func calcCheckDigit(isbn12 string) string {
 	sum := 0
-	for i, v := range strings.Split(partOfIsbn, "") {
+	for i, v := range strings.Split(isbn12, "") {
 		intV, _ := strconv.Atoi(v)
 		if i%2 == 0 {
 			sum += intV
