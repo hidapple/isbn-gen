@@ -29,10 +29,12 @@ func (cli *CLI) Run(args []string) int {
 	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
 	flags.SetOutput(cli.errStream)
 
-	flags.StringVar(&pubcode, "pubcode", "0", "Publisher code of ISBN")
-	flags.StringVar(&pubcode, "p", "0", "Publisher code of ISBN (Short)")
+	// Bind flag params
+	flags.StringVar(&pubcode, "pubcode", "", "Publisher code of ISBN.")
+	flags.StringVar(&pubcode, "p", "", "Publisher code of ISBN (Short).")
 
 	flags.BoolVar(&version, "version", false, "Print version information and quit.")
+	flags.BoolVar(&version, "v", false, "Print version information and quit (Short).")
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
@@ -45,11 +47,31 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
+	// Validate option: pubcode
+	if !isNumber(pubcode) {
+		fmt.Fprintf(cli.errStream, "%s: pubcode must be number: %s\n", Name, pubcode)
+		return ExitCodeError
+	}
+	if len(pubcode) > 8 {
+		fmt.Fprintf(cli.errStream, "%s: pubcode must be less than 8 digits: %s\n", Name, pubcode)
+		return ExitCodeError
+	}
+
 	// Generate ISBN
-	fmt.Println(generate(pubcode))
+	fmt.Fprintln(cli.outStream, generate(pubcode))
 
 	// Succeeded
 	return ExitCodeOK
+}
+
+func isNumber(pubcode string) bool {
+	if len(pubcode) == 0 {
+		return true
+	}
+	if _, err := strconv.Atoi(pubcode); err != nil {
+		return false
+	}
+	return true
 }
 
 func generate(pubcode string) string {
@@ -69,9 +91,9 @@ func generate12digits(pubcode string) string {
 	return isbn
 }
 
-func calcCheckDigit(partOfIsbn string) string {
+func calcCheckDigit(isbn12 string) string {
 	sum := 0
-	for i, v := range strings.Split(partOfIsbn, "") {
+	for i, v := range strings.Split(isbn12, "") {
 		intV, _ := strconv.Atoi(v)
 		if i%2 == 0 {
 			sum += intV
