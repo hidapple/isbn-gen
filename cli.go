@@ -29,6 +29,7 @@ func (cli *CLI) Run(args []string) int {
 	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
 	flags.SetOutput(cli.errStream)
 
+	// Bind flag params
 	flags.StringVar(&pubcode, "pubcode", "", "Publisher code of ISBN.")
 	flags.StringVar(&pubcode, "p", "", "Publisher code of ISBN (Short).")
 
@@ -47,6 +48,10 @@ func (cli *CLI) Run(args []string) int {
 	}
 
 	// Generate ISBN
+	if len(pubcode) > 8 {
+		fmt.Fprintln(cli.errStream, "Option -pubcode(-p) should be less than 8 digits.")
+		return ExitCodeError
+	}
 	fmt.Fprintln(cli.outStream, generate(pubcode))
 
 	// Succeeded
