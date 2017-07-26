@@ -18,4 +18,4 @@ clean:
 	@echo "Clean up ./bin directory"
 	@rm -rf bin/*
 
-.PHONY: test build install
+.PHONY: test build install clean
