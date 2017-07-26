@@ -4,10 +4,12 @@
 
 ## Install
 
-Use `go get` to install.
+Get repository by `go get` and use `make install` to make command available.
 
 ```sh
 $ go get -d github.com/hidapple/isbn-gen
+$ cd $GOPATH/src/github.com/hidapple/isbn-gen
+$ make install
 ```
 
 ## Usage
