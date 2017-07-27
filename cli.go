@@ -4,15 +4,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"math/rand"
 	"strconv"
-	"strings"
-	"time"
 )
 
 const (
-	ExitCodeOK    int = 0
-	ExitCodeError int = 1 + iota
+	ExitCodeOK    int = iota
+	ExitCodeError int = iota
 )
 
 type CLI struct {
@@ -52,13 +49,14 @@ func (cli *CLI) Run(args []string) int {
 		fmt.Fprintf(cli.errStream, "%s: pubcode must be number: %s\n", Name, pubcode)
 		return ExitCodeError
 	}
-	if len(pubcode) > 8 {
-		fmt.Fprintf(cli.errStream, "%s: pubcode must be less than 8 digits: %s\n", Name, pubcode)
+
+	// Show ISBN
+	isbn, err := NewIsbn(pubcode)
+	if err != nil {
+		fmt.Fprintf(cli.errStream, "%v\n", err.Error())
 		return ExitCodeError
 	}
-
-	// Generate ISBN
-	fmt.Fprintln(cli.outStream, generate(pubcode))
+	fmt.Fprintln(cli.outStream, isbn.GetNumber())
 
 	// Succeeded
 	return ExitCodeOK
@@ -68,44 +66,8 @@ func isNumber(pubcode string) bool {
 	if len(pubcode) == 0 {
 		return true
 	}
-	if _, err := strconv.Atoi(pubcode); err != nil {
-		return false
+	if _, err := strconv.Atoi(pubcode); err == nil {
+		return true
 	}
-	return true
-}
-
-func generate(pubcode string) string {
-	isbn := generate12digits(pubcode)
-	return isbn + calcCheckDigit(isbn)
-}
-
-func generate12digits(pubcode string) string {
-	const JapanCode = "9784"
-	rand.Seed(time.Now().UnixNano())
-
-	isbn := JapanCode + pubcode
-	rest := 8 - len(pubcode)
-	for i := 0; i < rest; i++ {
-		isbn += strconv.Itoa(rand.Intn(10))
-	}
-	return isbn
-}
-
-func calcCheckDigit(isbn12 string) string {
-	sum := 0
-	for i, v := range strings.Split(isbn12, "") {
-		intV, _ := strconv.Atoi(v)
-		if i%2 == 0 {
-			sum += intV
-		} else {
-			sum += intV * 3
-		}
-	}
-
-	calcResult := 10 - (sum % 10)
-	if calcResult == 10 {
-		return "0"
-	} else {
-		return strconv.Itoa(calcResult)
-	}
+	return false
 }
