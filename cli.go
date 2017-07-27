@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	ExitCodeOK    int = 0
-	ExitCodeError int = 1 + iota
+	ExitCodeOK    int = iota
+	ExitCodeError int = iota
 )
 
 type CLI struct {
