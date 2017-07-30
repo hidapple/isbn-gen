@@ -23,7 +23,7 @@ func TestRun_versionFlag(t *testing.T) {
 	}
 }
 
-func TestRun_pFlag(t *testing.T) {
+func TestRun_pubcodeFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
 	args := strings.Split("./isbn-gen -p 04", " ")
