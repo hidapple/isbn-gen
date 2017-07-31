@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"strconv"
 )
 
 const (
@@ -44,12 +43,6 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-	// Validate option: pubcode
-	if !isNumber(pubcode) {
-		fmt.Fprintf(cli.errStream, "%s: pubcode must be number: %s\n", Name, pubcode)
-		return ExitCodeError
-	}
-
 	// Show ISBN
 	isbn, err := NewIsbn(pubcode)
 	if err != nil {
@@ -60,14 +53,4 @@ func (cli *CLI) Run(args []string) int {
 
 	// Succeeded
 	return ExitCodeOK
-}
-
-func isNumber(pubcode string) bool {
-	if len(pubcode) == 0 {
-		return true
-	}
-	if _, err := strconv.Atoi(pubcode); err == nil {
-		return true
-	}
-	return false
 }
