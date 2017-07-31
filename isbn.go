@@ -13,8 +13,11 @@ type Isbn struct {
 }
 
 func NewIsbn(pubcode string) (*Isbn, error) {
+	if !isNumber(pubcode) {
+		return nil, fmt.Errorf("%s: pubcode must be a number: %s", Name, pubcode)
+	}
 	if len(pubcode) > 8 {
-		return nil, fmt.Errorf("%s: pubcode must be less than 8 digits: %s", Name, pubcode)
+		return nil, fmt.Errorf("%s: pubcode must be equal or less than 8 digits: %s", Name, pubcode)
 	}
 	return &Isbn{Number: generate(pubcode)}, nil
 }
@@ -57,4 +60,14 @@ func calcCheckDigit(isbn12 string) string {
 	} else {
 		return strconv.Itoa(calcResult)
 	}
+}
+
+func isNumber(pubcode string) bool {
+	if len(pubcode) == 0 {
+		return true
+	}
+	if _, err := strconv.Atoi(pubcode); err == nil {
+		return true
+	}
+	return false
 }
