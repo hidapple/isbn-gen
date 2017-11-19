@@ -5,7 +5,7 @@ go:
   - 1.9
 
 script:
-  - go test -v
+  - make test
 
 notification:
   email: false
