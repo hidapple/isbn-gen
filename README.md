@@ -37,3 +37,5 @@ Display the version of isbn-gen
 ### -p, -pubcode
 The publisher code of ISBN to generate.
 
+## License
+MIT
