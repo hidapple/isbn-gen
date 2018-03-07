@@ -35,13 +35,3 @@ func TestNewIsbn_CannotInit(t *testing.T) {
 		t.Errorf("Isbn should not be able to init with not a number pubcode: %s", p2)
 	}
 }
-
-func TestGetNumber(t *testing.T) {
-	expected := "9784060370112"
-	isbn := &Isbn{Number: expected}
-
-	actual := isbn.GetNumber()
-	if actual != expected {
-		t.Errorf("Expected is %s, but was %s", expected, actual)
-	}
-}

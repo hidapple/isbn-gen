@@ -14,16 +14,12 @@ type Isbn struct {
 
 func NewIsbn(pubcode string) (*Isbn, error) {
 	if !isNumber(pubcode) {
-		return nil, fmt.Errorf("%s: pubcode must be a number: %s", Name, pubcode)
+		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
 	}
 	if len(pubcode) > 8 {
-		return nil, fmt.Errorf("%s: pubcode must be equal or less than 8 digits: %s", Name, pubcode)
+		return nil, fmt.Errorf("pubcode must be equal or less than 8 digits: %s", pubcode)
 	}
 	return &Isbn{Number: generate(pubcode)}, nil
-}
-
-func (isbn *Isbn) GetNumber() string {
-	return isbn.Number
 }
 
 func generate(pubcode string) string {
