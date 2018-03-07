@@ -14,12 +14,12 @@ func TestRun_versionFlag(t *testing.T) {
 
 	status := cli.Run(args)
 	if status != ExitCodeOK {
-		t.Errorf("Expected exit code is %d but was %d", ExitCodeOK, status)
+		t.Fatalf("Expected exit code is %d but was %d", ExitCodeOK, status)
 	}
 
 	expected := fmt.Sprintf("isbn-gen version %s", Version)
 	if !strings.Contains(errStream.String(), expected) {
-		t.Errorf("Expected output contain %q but was %q", expected, errStream.String())
+		t.Fatalf("Expected output contain %q but was %q", expected, errStream.String())
 	}
 }
 
@@ -32,19 +32,19 @@ func TestRun_pubcodeFlag(t *testing.T) {
 
 	// ExitCode should be 0
 	if status != ExitCodeOK {
-		t.Errorf("Expected exit code is %d but was %d", ExitCodeOK, status)
+		t.Fatalf("Expected exit code is %d but was %d", ExitCodeOK, status)
 	}
 
 	// Output ISBN should contain 9784(Japan code) + 04(pubcode)
 	expected := fmt.Sprint("978404")
 	if !strings.Contains(outStream.String(), expected) {
-		t.Errorf("Expected output contain %q but was %q", expected, outStream.String())
+		t.Fatalf("Expected output contain %q but was %q", expected, outStream.String())
 	}
 
 	// Output ISBN should be 13 digits
 	expectedLength := 13
 	actualLength := len(strings.TrimRight(outStream.String(), "\n"))
 	if actualLength != expectedLength {
-		t.Errorf("Expected output length is %d but was %d.", expectedLength, actualLength)
+		t.Fatalf("Expected output length is %d but was %d.", expectedLength, actualLength)
 	}
 }

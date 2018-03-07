@@ -76,9 +76,11 @@ func (cli *CLI) Run(args []string) int {
 	}
 
 	// Show ISBN
+	var output string
 	for k, _ := range set {
-		fmt.Println(k)
+		output += k + "\n"
 	}
+	fmt.Fprint(cli.outStream, output)
 
 	// Succeeded
 	return ExitCodeOK
