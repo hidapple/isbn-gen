@@ -48,3 +48,61 @@ func TestRun_pubcodeFlag(t *testing.T) {
 		t.Fatalf("Expected output length is %d but was %d.", expectedLength, actualLength)
 	}
 }
+
+func TestRun_Repeat(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen -r 3", " ")
+
+	status := cli.Run(args)
+
+	if status != ExitCodeOK {
+		t.Fatalf("Expected exit code is %d but was %d", ExitCodeOK, status)
+	}
+
+	expectedLength := 13*3 + 3 // 13 digits * 3 + 3 times \n
+	actualLength := len(outStream.String())
+	if actualLength != expectedLength {
+		t.Errorf("Expected output length is %d but was %d.", expectedLength, actualLength)
+	}
+}
+
+func TestRun_RepeatCannotBeZero(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen -r 0", " ")
+
+	status := cli.Run(args)
+
+	if status != ExitCodeError {
+		t.Fatalf("Expected exit code is %d but was %d", ExitCodeError, status)
+	}
+}
+
+func TestRun_RepeatCannotBeNegative(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen -r -1", " ")
+
+	status := cli.Run(args)
+
+	if status != ExitCodeError {
+		t.Fatalf("Expected exit code is %d but was %d", ExitCodeError, status)
+	}
+}
+
+func TestRun_RepeatOverMaximumValue(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen -r 100000001", " ")
+
+	status := cli.Run(args)
+
+	if status != ExitCodeError {
+		t.Fatalf("Expected exit code is %d but was %d", ExitCodeError, status)
+	}
+}
