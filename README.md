@@ -28,14 +28,17 @@ $ isbn-gen -p 04
 
 ## Options
 
-### -h, -help
+### -help, -h
 Desplay a help message
 
-### -v, -version
+### -version, -v
 Display the version of isbn-gen
 
-### -p, -pubcode
+### -pubcode=code, -p
 The publisher code of ISBN to generate.
+
+### -repeat=n, -r
+Output ISBN n times
 
 ## License
 MIT
