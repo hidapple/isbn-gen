@@ -1,6 +1,6 @@
 COMMIT = $$(git describe --always)
 
-BUILD_FLAGS = -ldflags "-X main.Commit=\"$(COMMIT)\""
+BUILD_FLAGS = -ldflags "-X main.Commit=$(COMMIT)"
 
 test:
 	@echo "===> Running tests..."
@@ -13,7 +13,11 @@ build:
 cross-build:
 	@echo "===> Building for cross platform..."
 	@rm -rf ./dist
-	@gox -os="linux darwin windows" -arch="386 amd64" -output "dist/isbn-gen_{{.OS}}_{{.Arch}}"
+	@gox\
+		-os="linux darwin windows"\
+		-arch="386 amd64"\
+		-ldflags="$(COMMIT)"\
+		-output "dist/isbn-gen_{{.OS}}_{{.Arch}}"
 
 install:
 	@echo "===> Installing isbn-gen in $(GOPATH)/bin directory..."
