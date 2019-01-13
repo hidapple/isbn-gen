@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	ExitCodeOK    int = iota
-	ExitCodeError int = iota
+	exitCodeOK int = iota
+	exitCodeErr
 )
 
 type CLI struct {
@@ -39,25 +39,25 @@ func (cli *CLI) Run(args []string) int {
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
-		return ExitCodeError
+		return exitCodeErr
 	}
 
 	// Show version
 	if version {
 		fmt.Fprintf(cli.errStream, "%s version %s (%s)\n", Name, Version, Commit)
-		return ExitCodeOK
+		return exitCodeOK
 	}
 
 	if repeat < 1 {
 		fmt.Fprint(cli.errStream, "repeat(r) flag must be a positive number\n")
-		return ExitCodeError
+		return exitCodeErr
 	}
 
 	// Validate pubcode and repeat flag combination
 	max := int(math.Pow(10, float64(8-len(pubcode))))
 	if repeat > max {
 		fmt.Fprintf(cli.errStream, "There are only %d ISBNs that can be generated with pubcode:%s\n", max, pubcode)
-		return ExitCodeError
+		return exitCodeErr
 	}
 
 	// Generate ISBNs
@@ -66,7 +66,7 @@ func (cli *CLI) Run(args []string) int {
 		isbn, err := NewIsbn(pubcode)
 		if err != nil {
 			fmt.Fprintf(cli.errStream, "%v\n", err.Error())
-			return ExitCodeError
+			return exitCodeErr
 		}
 		set[isbn.Number] = struct{}{}
 
@@ -83,5 +83,5 @@ func (cli *CLI) Run(args []string) int {
 	fmt.Fprint(cli.outStream, output)
 
 	// Succeeded
-	return ExitCodeOK
+	return exitCodeOK
 }

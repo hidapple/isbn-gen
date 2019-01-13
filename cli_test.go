@@ -13,8 +13,8 @@ func TestRun_versionFlag(t *testing.T) {
 	args := strings.Split("./isbn-gen -version", " ")
 
 	status := cli.Run(args)
-	if status != ExitCodeOK {
-		t.Fatalf("Expected exit code is %d but was %d", ExitCodeOK, status)
+	if status != exitCodeOK {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 
 	expected := fmt.Sprintf("isbn-gen version %s (%s)", Version, Commit)
@@ -30,9 +30,9 @@ func TestRun_pubcodeFlag(t *testing.T) {
 
 	status := cli.Run(args)
 
-	// ExitCode should be 0
-	if status != ExitCodeOK {
-		t.Fatalf("Expected exit code is %d but was %d", ExitCodeOK, status)
+	// exitCode should be 0
+	if status != exitCodeOK {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 
 	// Output ISBN should contain 9784(Japan code) + 04(pubcode)
@@ -57,8 +57,8 @@ func TestRun_Repeat(t *testing.T) {
 
 	status := cli.Run(args)
 
-	if status != ExitCodeOK {
-		t.Fatalf("Expected exit code is %d but was %d", ExitCodeOK, status)
+	if status != exitCodeOK {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 
 	expectedLength := 13*3 + 3 // 13 digits * 3 + 3 times \n
@@ -76,8 +76,8 @@ func TestRun_RepeatCannotBeZero(t *testing.T) {
 
 	status := cli.Run(args)
 
-	if status != ExitCodeError {
-		t.Fatalf("Expected exit code is %d but was %d", ExitCodeError, status)
+	if status != exitCodeErr {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeErr, status)
 	}
 }
 
@@ -89,8 +89,8 @@ func TestRun_RepeatCannotBeNegative(t *testing.T) {
 
 	status := cli.Run(args)
 
-	if status != ExitCodeError {
-		t.Fatalf("Expected exit code is %d but was %d", ExitCodeError, status)
+	if status != exitCodeErr {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeErr, status)
 	}
 }
 
@@ -102,7 +102,7 @@ func TestRun_RepeatOverMaximumValue(t *testing.T) {
 
 	status := cli.Run(args)
 
-	if status != ExitCodeError {
-		t.Fatalf("Expected exit code is %d but was %d", ExitCodeError, status)
+	if status != exitCodeErr {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeErr, status)
 	}
 }

@@ -12,12 +12,12 @@ build:
 
 cross-build:
 	@echo "===> Building for cross platform..."
-	@rm -rf ./dist
+	@rm -rf ./dest
 	@gox\
 		-os="linux darwin windows"\
 		-arch="386 amd64"\
 		$(BUILD_FLAGS)\
-		-output "dist/isbn-gen_{{.OS}}_{{.Arch}}"
+		-output "dest/isbn-gen_{{.OS}}_{{.Arch}}"
 
 install:
 	@echo "===> Installing isbn-gen in $(GOPATH)/bin directory..."

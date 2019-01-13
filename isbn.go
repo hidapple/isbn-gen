@@ -8,10 +8,15 @@ import (
 	"time"
 )
 
+// TODO: Support other code
+const JAPAN_CODE = "9784"
+
+// Isbn represents ISBN code.
 type Isbn struct {
 	Number string
 }
 
+// NewIsbn generate Isbn struct with valid ISBN code.
 func NewIsbn(pubcode string) (*Isbn, error) {
 	if !isNumber(pubcode) {
 		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
@@ -22,23 +27,19 @@ func NewIsbn(pubcode string) (*Isbn, error) {
 	return &Isbn{Number: generate(pubcode)}, nil
 }
 
+// Generates 13 digits which is valid as ISBN code.
 func generate(pubcode string) string {
-	isbn := generate12digits(pubcode)
-	return isbn + calcCheckDigit(isbn)
-}
-
-func generate12digits(pubcode string) string {
-	const JapanCode = "9784"
 	rand.Seed(time.Now().UnixNano())
 
-	isbn := JapanCode + pubcode
+	isbn := JAPAN_CODE + pubcode
 	rest := 8 - len(pubcode)
 	for i := 0; i < rest; i++ {
 		isbn += strconv.Itoa(rand.Intn(10))
 	}
-	return isbn
+	return isbn + calcCheckDigit(isbn)
 }
 
+// Calculate ISBN last digit which is called check digit.
 func calcCheckDigit(isbn12 string) string {
 	sum := 0
 	for i, v := range strings.Split(isbn12, "") {
