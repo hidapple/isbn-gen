@@ -18,7 +18,7 @@ func TestRun_versionFlag(t *testing.T) {
 	}
 
 	expected := fmt.Sprintf("isbn-gen version %s (%s)", Version, Commit)
-	if !strings.Contains(errStream.String(), expected) {
+	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, errStream.String())
 	}
 }
