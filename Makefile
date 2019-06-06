@@ -1,6 +1,8 @@
+NAME = "isbn-gen"
+VERSION = "v0.2.1"
 COMMIT = $$(git describe --always)
 
-BUILD_FLAGS = -ldflags "-X main.Commit=$(COMMIT)"
+BUILD_FLAGS = -ldflags "-X main.Name=$(NAME) -X main.Version=$(VERSION) -X main.Revision=$(COMMIT)"
 
 test:
 	@echo "===> Running tests..."
