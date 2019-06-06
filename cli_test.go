@@ -10,6 +10,9 @@ import (
 func TestRun_versionFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
+	Name = "isbn-gen"
+	Version = "v1.0"
+	Revision = "abcdef"
 	args := strings.Split("./isbn-gen -version", " ")
 
 	status := cli.Run(args)
@@ -17,7 +20,7 @@ func TestRun_versionFlag(t *testing.T) {
 		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 
-	expected := fmt.Sprintf("isbn-gen version %s (%s)", Version, Commit)
+	expected := fmt.Sprintf("isbn-gen version %s (%s)", Version, Revision)
 	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, errStream.String())
 	}
