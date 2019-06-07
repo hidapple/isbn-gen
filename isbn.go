@@ -8,31 +8,31 @@ import (
 	"time"
 )
 
-// TODO: Support other code
-const JAPAN_CODE = "9784"
-
 // Isbn represents ISBN code.
 type Isbn struct {
 	Number string
 }
 
 // NewIsbn generate Isbn struct with valid ISBN code.
-func NewIsbn(pubcode string) (*Isbn, error) {
+func NewIsbn(group, pubcode string) (*Isbn, error) {
+	if _, ok := PrefixMap[group]; !ok {
+		return nil, fmt.Errorf("%q is not supported", group)
+	}
 	if !isNumber(pubcode) {
 		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
 	}
 	if len(pubcode) > 8 {
 		return nil, fmt.Errorf("pubcode must be equal or less than 8 digits: %s", pubcode)
 	}
-	return &Isbn{Number: generate(pubcode)}, nil
+	return &Isbn{Number: generate(PrefixMap[group], pubcode)}, nil
 }
 
 // Generates 13 digits which is valid as ISBN code.
-func generate(pubcode string) string {
+func generate(prefix, pubcode string) string {
 	rand.Seed(time.Now().UnixNano())
 
-	isbn := JAPAN_CODE + pubcode
-	rest := 8 - len(pubcode)
+	isbn := prefix + pubcode
+	rest := 12 - len(isbn)
 	for i := 0; i < rest; i++ {
 		isbn += strconv.Itoa(rand.Intn(10))
 	}
