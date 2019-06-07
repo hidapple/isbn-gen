@@ -20,7 +20,7 @@ func TestRun_versionFlag(t *testing.T) {
 		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 
-	expected := fmt.Sprintf("isbn-gen version %s (%s)", Version, Revision)
+	expected := fmt.Sprintf("isbn-gen version %s (rev: %s)", Version, Revision)
 	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, errStream.String())
 	}
