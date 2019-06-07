@@ -18,7 +18,8 @@ type CLI struct {
 
 func (cli *CLI) Run(args []string) int {
 	var (
-		pubcode string
+		idGrp   string
+		pubCode string
 		repeat  int
 		version bool
 	)
@@ -28,11 +29,14 @@ func (cli *CLI) Run(args []string) int {
 	flags.SetOutput(cli.errStream)
 
 	// Bind flag params
-	flags.StringVar(&pubcode, "pubcode", "", "Publisher code of ISBN.")
-	flags.StringVar(&pubcode, "p", "", "Publisher code of ISBN (Short).")
+	flags.StringVar(&idGrp, "id-group", "jp", "Identifying group of ISBN")
+	flags.StringVar(&idGrp, "i", "jp", "Identifying group of ISBN (Short)")
 
-	flags.IntVar(&repeat, "repeat", 1, "Generate specified number of ISBN")
-	flags.IntVar(&repeat, "r", 1, "Generate specified number of ISBN")
+	flags.StringVar(&pubCode, "pubcode", "", "Publisher code of ISBN.")
+	flags.StringVar(&pubCode, "p", "", "Publisher code of ISBN (Short).")
+
+	flags.IntVar(&repeat, "repeat", 1, "Generate given number of ISBN")
+	flags.IntVar(&repeat, "r", 1, "Generate given number of ISBN (Short)")
 
 	flags.BoolVar(&version, "version", false, "Print version information and quit.")
 	flags.BoolVar(&version, "v", false, "Print version information and quit (Short).")
@@ -53,17 +57,19 @@ func (cli *CLI) Run(args []string) int {
 		return exitCodeErr
 	}
 
-	// Validate pubcode and repeat flag combination
-	max := int(math.Pow(10, float64(8-len(pubcode))))
+	// Validate prefix, pubcode and repeat flag combination
+	max := int(math.Pow(10, float64(12-len(PrefixMap[idGrp]+pubCode))))
 	if repeat > max {
-		fmt.Fprintf(cli.errStream, "There are only %d ISBNs that can be generated with pubcode:%s\n", max, pubcode)
+		fmt.Fprintf(cli.errStream,
+			"there are only %d ISBNs starting with %s but repeat option is %s\n",
+			max, PrefixMap[idGrp]+pubCode, repeat)
 		return exitCodeErr
 	}
 
 	// Generate ISBNs
 	set := make(map[string]struct{})
 	for {
-		isbn, err := NewIsbn(pubcode)
+		isbn, err := NewIsbn(idGrp, pubCode)
 		if err != nil {
 			fmt.Fprintf(cli.errStream, "%v\n", err.Error())
 			return exitCodeErr
