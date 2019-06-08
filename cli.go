@@ -43,6 +43,7 @@ func (cli *CLI) Run(args []string) int {
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
+		fmt.Fprintf(cli.outStream, "Parse error: %s", err)
 		return exitCodeErr
 	}
 
@@ -61,7 +62,7 @@ func (cli *CLI) Run(args []string) int {
 	max := int(math.Pow(10, float64(12-len(PrefixMap[idGrp]+pubCode))))
 	if repeat > max {
 		fmt.Fprintf(cli.errStream,
-			"there are only %d ISBNs starting with %s but repeat option is %s\n",
+			"there are only %d ISBNs starting with %s but repeat option is %d\n",
 			max, PrefixMap[idGrp]+pubCode, repeat)
 		return exitCodeErr
 	}
@@ -69,7 +70,7 @@ func (cli *CLI) Run(args []string) int {
 	// Generate ISBNs
 	set := make(map[string]struct{})
 	for {
-		isbn, err := NewIsbn(idGrp, pubCode)
+		isbn, err := NewISBN(idGrp, pubCode)
 		if err != nil {
 			fmt.Fprintf(cli.errStream, "%v\n", err.Error())
 			return exitCodeErr

@@ -8,23 +8,24 @@ import (
 	"time"
 )
 
-// Isbn represents ISBN code.
-type Isbn struct {
+// ISBN represents ISBN code.
+type ISBN struct {
 	Number string
 }
 
-// NewIsbn generate Isbn struct with valid ISBN code.
-func NewIsbn(group, pubcode string) (*Isbn, error) {
-	if _, ok := PrefixMap[group]; !ok {
+// NewISBN generate ISBN struct with valid ISBN code.
+func NewISBN(group, pubcode string) (*ISBN, error) {
+	prefix, ok := PrefixMap[group]
+	if !ok {
 		return nil, fmt.Errorf("%q is not supported", group)
 	}
 	if !isNumber(pubcode) {
 		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
 	}
-	if len(pubcode) > 8 {
-		return nil, fmt.Errorf("pubcode must be equal or less than 8 digits: %s", pubcode)
+	if len(prefix+pubcode) > 12 {
+		return nil, fmt.Errorf("prefix + pubcode must be equal or less than 12 digits: %s", pubcode)
 	}
-	return &Isbn{Number: generate(PrefixMap[group], pubcode)}, nil
+	return &ISBN{Number: generate(PrefixMap[group], pubcode)}, nil
 }
 
 // Generates 13 digits which is valid as ISBN code.

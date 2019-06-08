@@ -4,34 +4,37 @@ import (
 	"testing"
 )
 
-func TestNewIsbn_Init(t *testing.T) {
-	// when pubcode is not specified
-	p1 := ""
-	_, err1 := NewIsbn(p1)
-	if err1 != nil {
-		t.Error("Isbn is expected to be able to init with empty pubcode")
+func TestNewISBN_Init(t *testing.T) {
+	tests := []struct {
+		groupCode string
+		pubCode   string
+	}{
+		{"jp", ""},
+		{"jp", "00000000"},
+		{"br1", "0000000"},
 	}
 
-	// when pubcode is less than 8 digits
-	p2 := "00000000"
-	_, err2 := NewIsbn(p2)
-	if err2 != nil {
-		t.Errorf("Isbn is expected to be able to init with %d digits pubcode", len(p2))
+	for i, tt := range tests {
+		if _, err := NewISBN(tt.groupCode, tt.pubCode); err != nil {
+			t.Errorf("Case[%d]: ISBN is expected to be able to init with grupCode=%q, pubCode=%q",
+				i, tt.groupCode, tt.pubCode)
+		}
 	}
 }
 
-func TestNewIsbn_CannotInit(t *testing.T) {
-	// when pubcode is 8 digits or more
-	p1 := "000000000"
-	_, err1 := NewIsbn(p1)
-	if err1 == nil {
-		t.Errorf("Isbn should not be able to init with %d digits pubcode", len(p1))
+func TestNewISBN_CannotInit(t *testing.T) {
+	tests := []struct {
+		groupCode string
+		pubCode   string
+	}{
+		{"jp", "000000000"},
+		{"br1", "00000000"},
 	}
 
-	// when pubcode is not number
-	p2 := "abc"
-	_, err2 := NewIsbn(p1)
-	if err2 == nil {
-		t.Errorf("Isbn should not be able to init with not a number pubcode: %s", p2)
+	for i, tt := range tests {
+		if _, err := NewISBN(tt.groupCode, tt.pubCode); err == nil {
+			t.Errorf("Case[%d]: ISBN should not be able to init with groupCode=%q, pubCode=%q",
+				i, tt.groupCode, tt.pubCode)
+		}
 	}
 }
