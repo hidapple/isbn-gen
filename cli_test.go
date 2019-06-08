@@ -26,6 +26,32 @@ func TestRun_versionFlag(t *testing.T) {
 	}
 }
 
+func TestRun_IdGrpFlag(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen -id-group en1", " ")
+
+	status := cli.Run(args)
+
+	// exitCode should be 0
+	if status != exitCodeOK {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
+	}
+
+	// Output ISBN should contain 9784(en1 prefix)
+	expected := fmt.Sprint("9780")
+	if !strings.Contains(outStream.String(), expected) {
+		t.Fatalf("Expected output contain %q but was %q", expected, outStream.String())
+	}
+
+	// Output ISBN should be 13 digits
+	expectedLength := 13
+	actualLength := len(strings.TrimRight(outStream.String(), "\n"))
+	if actualLength != expectedLength {
+		t.Fatalf("Expected output length is %d but was %d.", expectedLength, actualLength)
+	}
+}
+
 func TestRun_pubcodeFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
@@ -38,7 +64,7 @@ func TestRun_pubcodeFlag(t *testing.T) {
 		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 
-	// Output ISBN should contain 9784(Japan code) + 04(pubcode)
+	// Output ISBN should contain 9784(default prefix) + 04(pubcode)
 	expected := fmt.Sprint("978404")
 	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, outStream.String())
