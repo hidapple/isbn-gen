@@ -26,7 +26,7 @@ $ isbn-gen -p 04
 9784047382084
 ```
 
-## Options
+## Option Flags
 
 ### -help, -h
 Desplay a help message
@@ -34,11 +34,8 @@ Desplay a help message
 ### -version, -v
 Display the version of isbn-gen
 
-### -pubcode=code, -p
+### -pubcode, -p
 The publisher code of ISBN to generate.
-
-### -repeat=n, -r
-Output ISBN n times
 
 ## License
 MIT
