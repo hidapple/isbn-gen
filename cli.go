@@ -4,6 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"io"
+
+	"github.com/hidapple/isbn-gen/isbn"
+	"github.com/olekukonko/tablewriter"
 )
 
 const (
@@ -20,6 +23,7 @@ func (cli *CLI) Run(args []string) int {
 		idGrp   string
 		pubCode string
 		version bool
+		list    bool
 	)
 
 	// Define option flag parse
@@ -27,14 +31,17 @@ func (cli *CLI) Run(args []string) int {
 	flags.SetOutput(cli.errStream)
 
 	// Bind flag params
-	flags.StringVar(&idGrp, "id-group", "jp", "Identifying group of ISBN")
-	flags.StringVar(&idGrp, "i", "jp", "Identifying group of ISBN (Short)")
+	flags.BoolVar(&version, "version", false, "Print version information and quit")
+	flags.BoolVar(&version, "v", false, "Print version information and quit")
 
-	flags.StringVar(&pubCode, "pubcode", "", "Publisher code of ISBN.")
-	flags.StringVar(&pubCode, "p", "", "Publisher code of ISBN (Short).")
+	flags.BoolVar(&list, "list", false, "Print supported registration group identifier list")
+	flags.BoolVar(&list, "l", false, "Print supported registration group identifier list")
 
-	flags.BoolVar(&version, "version", false, "Print version information and quit.")
-	flags.BoolVar(&version, "v", false, "Print version information and quit (Short).")
+	flags.StringVar(&idGrp, "i", "jp", "Registration group identifier of ISBN")
+	flags.StringVar(&idGrp, "id-group", "jp", "Registration group identifier of ISBN")
+
+	flags.StringVar(&pubCode, "pubcode", "", "Publisher code of ISBN")
+	flags.StringVar(&pubCode, "p", "", "Publisher code of ISBN")
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
@@ -48,14 +55,26 @@ func (cli *CLI) Run(args []string) int {
 		return exitCodeOK
 	}
 
-	// Generate ISBNs
-	isbn, err := NewISBN(idGrp, pubCode)
+	if list {
+		cli.printSupportedGroups()
+		return exitCodeOK
+	}
+
+	// Generate ISBN
+	isbn, err := isbn.NewISBN(idGrp, pubCode)
 	if err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err.Error())
 		return exitCodeErr
 	}
 	fmt.Fprintln(cli.outStream, isbn.Number)
-
-	// Succeeded
 	return exitCodeOK
+}
+
+func (cli *CLI) printSupportedGroups() {
+	table := tablewriter.NewWriter(cli.outStream)
+	table.SetHeader([]string{"identifying group", "abbreviation", "prefix + identifier"})
+	for _, v := range isbn.Identifiers {
+		table.Append([]string{v.GroupName, v.Abbreviation, v.Prefix})
+	}
+	table.Render()
 }

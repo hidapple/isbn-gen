@@ -1,4 +1,4 @@
-package main
+package isbn
 
 import (
 	"fmt"
@@ -15,17 +15,18 @@ type ISBN struct {
 
 // NewISBN generate ISBN struct with valid ISBN code.
 func NewISBN(group, pubcode string) (*ISBN, error) {
-	prefix, ok := PrefixMap[group]
-	if !ok {
-		return nil, fmt.Errorf("%q is not supported", group)
+	identifier := SearchIdentifier(group)
+	if identifier == nil {
+		return nil, fmt.Errorf("%q is not supported.", group)
 	}
 	if !isNumber(pubcode) {
 		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
 	}
-	if len(prefix+pubcode) > 12 {
-		return nil, fmt.Errorf("prefix + pubcode must be equal or less than 12 digits: %s", pubcode)
+	if len(identifier.Prefix+pubcode) > 12 {
+		return nil, fmt.Errorf("prefix + pubcode must be equal or less than 12 digits: prefix=%s, pubCode=%s",
+			identifier.Prefix, pubcode)
 	}
-	return &ISBN{Number: generate(PrefixMap[group], pubcode)}, nil
+	return &ISBN{Number: generate(identifier.Prefix, pubcode)}, nil
 }
 
 // Generates 13 digits which is valid as ISBN code.

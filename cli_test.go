@@ -26,7 +26,7 @@ func TestRun_versionFlag(t *testing.T) {
 	}
 }
 
-func TestRun_IdGrpFlag(t *testing.T) {
+func TestRun_idGroupFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
 	args := strings.Split("./isbn-gen -id-group en1", " ")
