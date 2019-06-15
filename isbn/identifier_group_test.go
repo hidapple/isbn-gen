@@ -7,10 +7,11 @@ func TestSearchIdentifier(t *testing.T) {
 		name            string
 		expected_hit    bool
 		expected_prefix string
+		expected_id     string
 	}{
-		{"Japan", true, "9784"},
-		{"jp", true, "9784"},
-		{"not_exist", false, ""},
+		{"Japan", true, "978", "4"},
+		{"jp", true, "978", "4"},
+		{"not_exist", false, "", ""},
 	}
 
 	for i, tt := range tests {
@@ -29,6 +30,10 @@ func TestSearchIdentifier(t *testing.T) {
 		if tt.expected_prefix != actual.Prefix {
 			t.Fatalf("case %d: wrong prefix was found by %s. want=%s, got=%s",
 				i, tt.name, tt.expected_prefix, actual.Prefix)
+		}
+		if tt.expected_id != actual.Identifier {
+			t.Fatalf("case %d: wrong identidier was found by %s. want=%s, got=%s",
+				i, tt.name, tt.expected_id, actual.Identifier)
 		}
 	}
 }

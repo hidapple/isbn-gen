@@ -72,9 +72,9 @@ func (cli *CLI) Run(args []string) int {
 
 func (cli *CLI) printSupportedGroups() {
 	table := tablewriter.NewWriter(cli.outStream)
-	table.SetHeader([]string{"identifying group", "abbreviation", "prefix + identifier"})
+	table.SetHeader([]string{"identifying group", "abbreviation", "prefix", "identifier"})
 	for _, v := range isbn.Identifiers {
-		table.Append([]string{v.GroupName, v.Abbreviation, v.Prefix})
+		table.Append([]string{v.GroupName, v.Abbreviation, v.Prefix, v.Identifier})
 	}
 	table.Render()
 }
