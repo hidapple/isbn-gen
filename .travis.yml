@@ -1,8 +1,13 @@
 language: go
 
 go:
-  - 1.8
-  - 1.9
+  - 1.12.x
+
+env:
+  - GO111MODULE=on
+
+git:
+  depth: 1
 
 script:
   - make test
