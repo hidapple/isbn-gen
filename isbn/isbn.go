@@ -15,18 +15,17 @@ type ISBN struct {
 
 // NewISBN generate ISBN struct with valid ISBN code.
 func NewISBN(group, pubcode string) (*ISBN, error) {
-	identifier := SearchIdentifier(group)
-	if identifier == nil {
+	id := SearchIdentifier(group)
+	if id == nil {
 		return nil, fmt.Errorf("%q is not supported.", group)
 	}
 	if !isNumber(pubcode) {
 		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
 	}
-	if len(identifier.Prefix+pubcode) > 12 {
-		return nil, fmt.Errorf("prefix + pubcode must be equal or less than 12 digits: prefix=%s, pubCode=%s",
-			identifier.Prefix, pubcode)
+	if len(id.Prefix+id.Identifier+pubcode) > 12 {
+		return nil, fmt.Errorf("pubcode is too long: pubCode=%s", pubcode)
 	}
-	return &ISBN{Number: generate(identifier.Prefix, pubcode)}, nil
+	return &ISBN{Number: generate(id.Prefix+id.Identifier, pubcode)}, nil
 }
 
 // Generates 13 digits which is valid as ISBN code.

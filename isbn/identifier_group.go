@@ -8,8 +8,11 @@ type Identifier struct {
 	// Abbreviation is the shorthand name of the GroupName
 	Abbreviation string
 
-	// Prefix is the ISBN prefix assigned the Group
+	// Prefix is the ISBN prefix assigned to the Group
 	Prefix string
+
+	// Identifiers is the ISBN identifier assigned to the Group
+	Identifier string
 }
 
 // Identifiers is list of ISBN identifer groups
@@ -17,47 +20,56 @@ var Identifiers = []*Identifier{
 	{
 		GroupName:    "English1",
 		Abbreviation: "en1",
-		Prefix:       "9780",
+		Prefix:       "978",
+		Identifier:   "0",
 	},
 	{
 		GroupName:    "English2",
 		Abbreviation: "en2",
-		Prefix:       "9781",
+		Prefix:       "978",
+		Identifier:   "1",
 	},
 	{
 		GroupName:    "French",
 		Abbreviation: "fr",
-		Prefix:       "9782",
+		Prefix:       "978",
+		Identifier:   "2",
 	},
 	{
 		GroupName:    "German",
 		Abbreviation: "de",
-		Prefix:       "9783",
+		Prefix:       "978",
+		Identifier:   "3",
 	},
 	{
 		GroupName:    "Japan",
 		Abbreviation: "jp",
-		Prefix:       "9784",
+		Prefix:       "978",
+		Identifier:   "4",
 	},
 	{
 		GroupName:    "Russia",
 		Abbreviation: "ru",
-		Prefix:       "9785",
+		Prefix:       "978",
+		Identifier:   "5",
 	},
 	{
 		GroupName:    "China",
 		Abbreviation: "cn",
-		Prefix:       "9787",
+		Prefix:       "978",
+		Identifier:   "7",
 	},
 	{
 		GroupName:    "Brazil1",
 		Abbreviation: "br1",
-		Prefix:       "97865",
+		Prefix:       "978",
+		Identifier:   "65",
 	},
 	{
 		GroupName:    "Brazil2",
 		Abbreviation: "br2",
-		Prefix:       "97885",
+		Prefix:       "978",
+		Identifier:   "85",
 	},
 }
 
