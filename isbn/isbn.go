@@ -8,42 +8,64 @@ import (
 	"time"
 )
 
-// ISBN represents ISBN code.
+// ISBN represents ISBN number.
 type ISBN struct {
-	Number string
+	// prefix is prefix of ISBN.
+	prefix string
+
+	// identifier is identifying group of ISBN.
+	identifier string
+
+	// code is code part of ISBN which consist of publisher code and book code.
+	code string
+
+	// checkDigit is check digit value of ISBN.
+	checkDigit string
 }
 
 // NewISBN generate ISBN struct with valid ISBN code.
-func NewISBN(group, pubcode string) (*ISBN, error) {
+func NewISBN(group, code string) (*ISBN, error) {
 	id := SearchIdentifier(group)
 	if id == nil {
 		return nil, fmt.Errorf("%q is not supported.", group)
 	}
-	if !isNumber(pubcode) {
-		return nil, fmt.Errorf("pubcode must be a number: %s", pubcode)
+	if !isNumber(code) {
+		return nil, fmt.Errorf("bookCode must be a number: %s", code)
 	}
-	if len(id.Prefix+id.Identifier+pubcode) > 12 {
-		return nil, fmt.Errorf("pubcode is too long: pubCode=%s", pubcode)
+	if len(id.Prefix+id.Identifier+code) > 12 {
+		return nil, fmt.Errorf("code is too long: code=%s", code)
 	}
-	return &ISBN{Number: generate(id.Prefix+id.Identifier, pubcode)}, nil
+
+	code = generateCode(code, 12-len(id.Prefix+id.Identifier))
+	checkDigit := calcCheckDigit(id.Prefix + id.Identifier + code)
+	return &ISBN{
+		prefix:     id.Prefix,
+		identifier: id.Identifier,
+		code:       code,
+		checkDigit: checkDigit,
+	}, nil
 }
 
-// Generates 13 digits which is valid as ISBN code.
-func generate(prefix, pubcode string) string {
+// Number returns full ISBN number.
+func (isbn *ISBN) Number() string {
+	return isbn.prefix + isbn.identifier + isbn.code + isbn.checkDigit
+}
+
+// generateCode generates ISBN code part with given prefix.
+func generateCode(prefix string, length int) string {
 	rand.Seed(time.Now().UnixNano())
 
-	isbn := prefix + pubcode
-	rest := 12 - len(isbn)
-	for i := 0; i < rest; i++ {
-		isbn += strconv.Itoa(rand.Intn(10))
+	code := prefix
+	for i := 0; i < length-len(prefix); i++ {
+		code += strconv.Itoa(rand.Intn(10))
 	}
-	return isbn + calcCheckDigit(isbn)
+	return code
 }
 
-// Calculate ISBN last digit which is called check digit.
-func calcCheckDigit(isbn12 string) string {
+// calcCheckDigit calculates ISBN last digit which is called check digit.
+func calcCheckDigit(isbn string) string {
 	sum := 0
-	for i, v := range strings.Split(isbn12, "") {
+	for i, v := range strings.Split(isbn, "") {
 		intV, _ := strconv.Atoi(v)
 		if i%2 == 0 {
 			sum += intV

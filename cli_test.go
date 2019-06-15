@@ -13,7 +13,7 @@ func TestRun_versionFlag(t *testing.T) {
 	Name = "isbn-gen"
 	Version = "v1.0"
 	Revision = "abcdef"
-	args := strings.Split("./isbn-gen -version", " ")
+	args := strings.Split("./isbn-gen --version", " ")
 
 	status := cli.Run(args)
 	if status != exitCodeOK {
@@ -29,7 +29,7 @@ func TestRun_versionFlag(t *testing.T) {
 func TestRun_idGroupFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
-	args := strings.Split("./isbn-gen -id-group en1", " ")
+	args := strings.Split("./isbn-gen --id-group en1", " ")
 
 	status := cli.Run(args)
 
@@ -52,10 +52,10 @@ func TestRun_idGroupFlag(t *testing.T) {
 	}
 }
 
-func TestRun_pubcodeFlag(t *testing.T) {
+func TestRun_codeFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
-	args := strings.Split("./isbn-gen -p 04", " ")
+	args := strings.Split("./isbn-gen --code 04", " ")
 
 	status := cli.Run(args)
 

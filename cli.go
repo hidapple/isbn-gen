@@ -21,12 +21,10 @@ type CLI struct {
 func (cli *CLI) Run(args []string) int {
 	var (
 		idGrp   string
-		pubCode string
+		code    string
 		version bool
 		list    bool
 	)
-
-	// Define option flag parse
 	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
 	flags.SetOutput(cli.errStream)
 
@@ -37,15 +35,14 @@ func (cli *CLI) Run(args []string) int {
 	flags.BoolVar(&list, "list", false, "Print supported registration group identifier list")
 	flags.BoolVar(&list, "l", false, "Print supported registration group identifier list")
 
-	flags.StringVar(&idGrp, "i", "jp", "Registration group identifier of ISBN")
+	flags.StringVar(&idGrp, "id", "jp", "Registration group identifier of ISBN")
 	flags.StringVar(&idGrp, "id-group", "jp", "Registration group identifier of ISBN")
 
-	flags.StringVar(&pubCode, "pubcode", "", "Publisher code of ISBN")
-	flags.StringVar(&pubCode, "p", "", "Publisher code of ISBN")
+	flags.StringVar(&code, "code", "", "Specify the code part of ISBN")
+	flags.StringVar(&code, "c", "", "Specify the code part of ISBN")
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
-		fmt.Fprintf(cli.errStream, "Parse error: %s\n", err)
 		return exitCodeErr
 	}
 
@@ -55,18 +52,19 @@ func (cli *CLI) Run(args []string) int {
 		return exitCodeOK
 	}
 
+	// Show supported registration group list
 	if list {
 		cli.printSupportedGroups()
 		return exitCodeOK
 	}
 
 	// Generate ISBN
-	isbn, err := isbn.NewISBN(idGrp, pubCode)
+	isbn, err := isbn.NewISBN(idGrp, code)
 	if err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err.Error())
 		return exitCodeErr
 	}
-	fmt.Fprintln(cli.outStream, isbn.Number)
+	fmt.Fprintln(cli.outStream, isbn.Number())
 	return exitCodeOK
 }
 
