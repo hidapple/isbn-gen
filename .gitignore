@@ -1,3 +1,4 @@
 *.test
 bin/
 dest/
+coverage.txt

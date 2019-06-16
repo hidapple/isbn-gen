@@ -31,6 +31,8 @@ func TestNewISBN_CannotInit(t *testing.T) {
 		{"Japan", "000000000"},
 		{"jp", "000000000"},
 		{"br1", "00000000"},
+		{"not_exist", ""},
+		{"jp", "not_number"},
 	}
 
 	for i, tt := range tests {

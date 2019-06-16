@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -23,6 +25,26 @@ func TestRun_versionFlag(t *testing.T) {
 	expected := fmt.Sprintf("isbn-gen version %s (rev: %s)", Version, Revision)
 	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, errStream.String())
+	}
+}
+
+func TestRun_listFlag(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen --list", " ")
+
+	status := cli.Run(args)
+
+	// exitCode should be 0
+	if status != exitCodeOK {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
+	}
+
+	// Supported identifier group table should be shown
+	golden := filepath.Join("testdata", t.Name()+".golden")
+	expected, _ := ioutil.ReadFile(golden)
+	if outStream.String() != string(expected) {
+		t.Fatalf("Expected output is %s but was %s", expected, outStream.String())
 	}
 }
 

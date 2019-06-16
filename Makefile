@@ -6,7 +6,11 @@ BUILD_FLAGS = -ldflags "-X main.Name=$(NAME) -X main.Version=$(VERSION) -X main.
 
 test:
 	@echo "===> Running tests..."
-	@go test -v ./...
+	@go test ./... -v -coverprofile=coverage.txt -covermode=atomic
+
+coverage:
+	@echo "===> Open coverage result..."
+	@go tool cover -html coverage.txt
 
 build:
 	@echo "===> Building isbn-gen in ./bin directory..."
