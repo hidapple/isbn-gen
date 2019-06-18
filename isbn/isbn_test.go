@@ -12,7 +12,7 @@ func TestNewISBN_Init(t *testing.T) {
 		{"Japan", ""},
 		{"jp", ""},
 		{"jp", "00000000"},
-		{"br1", "0000000"},
+		{"br", "0000000"},
 	}
 
 	for i, tt := range tests {
