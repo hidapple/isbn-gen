@@ -38,8 +38,8 @@ func (cli *CLI) Run(args []string) int {
 	flags.StringVar(&idGrp, "id", "jp", "Registration group identifier of ISBN")
 	flags.StringVar(&idGrp, "id-group", "jp", "Registration group identifier of ISBN")
 
-	flags.StringVar(&code, "code", "", "Specify the code part of ISBN")
-	flags.StringVar(&code, "c", "", "Specify the code part of ISBN")
+	flags.StringVar(&code, "code", "", "The code part pregix of ISBN")
+	flags.StringVar(&code, "c", "", "The code part pregix of ISBN")
 
 	// Parse commandline flag
 	if err := flags.Parse(args[1:]); err != nil {
