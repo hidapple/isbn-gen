@@ -1,5 +1,5 @@
 NAME = "isbn-gen"
-VERSION = "v0.2.1"
+VERSION = "v1.0.0"
 COMMIT = $$(git describe --always)
 
 BUILD_FLAGS = -ldflags "-X main.Name=$(NAME) -X main.Version=$(VERSION) -X main.Revision=$(COMMIT)"
@@ -33,4 +33,4 @@ clean:
 	@echo "===> Cleaning up ./bin directory..."
 	@rm -rf bin/*
 
-.PHONY: test build cross-build install clean
+.PHONY: test coverage build cross-build install clean

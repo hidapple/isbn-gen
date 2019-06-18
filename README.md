@@ -27,7 +27,7 @@ Print a help message.
 #### -version, -v
 Print the version of isbn-gen.
 
-### -list, -l
+#### -list, -l
 Print supported ISBN registration group identifier list. Currently `isbn-gen` supports following group identifiers.
 ```
 +-------------------+--------------+--------+------------+
@@ -62,7 +62,7 @@ Print supported ISBN registration group identifier list. Currently `isbn-gen` su
 +-------------------+--------------+--------+------------+
 ```
 
-### -id-group, -id
+#### -id-group, -id
 The ISBN registration group identifier name or abbreviation. You can specify the registration identifier group from the table listed above then `isbn-gen` generates ISBN which belongs to the given identifier group.
 
 ```sh
@@ -70,7 +70,7 @@ $ isbn-gen -id-group cn
 9787644999709
 ```
 
-### -code, -c
+#### -code, -c
 The code part of ISBN which consist of publisher code and book code. You can specify the code part prefix of ISBN.
 ```sh
 $ isbn-gen -code 123
