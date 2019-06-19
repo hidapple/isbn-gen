@@ -12,15 +12,8 @@ builds:
   ldflags:
   - -s -w -X main.Name=isbn-gen -X main.Version={{.Tag}} -X main.Revision={{.ShortCommit}}
 archives:
-  - wrap_in_directory: true
-    name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
+  - name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
 checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-    - '^docs:'
-    - '^test:'
