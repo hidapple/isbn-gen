@@ -1,11 +1,28 @@
 language: go
 
 go:
-  - 1.8
-  - 1.9
+  - 1.12.x
+
+env:
+  - GO111MODULE=on
+
+git:
+  depth: 1
 
 script:
-  - make test
+  - go vet ./...
+  - go test ./... -v -coverprofile=coverage.txt -covermode=atomic
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: curl -sL https://git.io/goreleaser | bash
+    on:
+      tags: true
+      contition: $TRAVIS_OS_NAME = linux
 
 notification:
   email: false

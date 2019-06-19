@@ -1,10 +1,16 @@
+NAME = "isbn-gen"
+VERSION = "v1.0.0"
 COMMIT = $$(git describe --always)
 
-BUILD_FLAGS = -ldflags "-X main.Commit=$(COMMIT)"
+BUILD_FLAGS = -ldflags "-X main.Name=$(NAME) -X main.Version=$(VERSION) -X main.Revision=$(COMMIT)"
 
 test:
 	@echo "===> Running tests..."
-	@go test -v ./...
+	@go test ./... -v -coverprofile=coverage.txt -covermode=atomic
+
+coverage:
+	@echo "===> Open coverage result..."
+	@go tool cover -html coverage.txt
 
 build:
 	@echo "===> Building isbn-gen in ./bin directory..."
@@ -27,4 +33,4 @@ clean:
 	@echo "===> Cleaning up ./bin directory..."
 	@rm -rf bin/*
 
-.PHONY: test build cross-build install clean
+.PHONY: test coverage build cross-build install clean
