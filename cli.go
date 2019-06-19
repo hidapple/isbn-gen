@@ -14,10 +14,12 @@ const (
 	exitCodeErr
 )
 
+// CLI represents command line interface.
 type CLI struct {
 	outStream, errStream io.Writer
 }
 
+// Run parses command line and execute it with given flags.
 func (cli *CLI) Run(args []string) int {
 	var (
 		idGrp   string

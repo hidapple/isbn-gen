@@ -1,5 +1,8 @@
 # isbn-gen
 
+[![Build Status](https://travis-ci.org/hidapple/isbn-gen.svg?branch=master)](https://travis-ci.org/hidapple/isbn-gen)
+[![codecov](https://codecov.io/gh/hidapple/isbn-gen/branch/master/graph/badge.svg)](https://codecov.io/gh/hidapple/isbn-gen)
+
 `isbn-gen` is the command line tool which generates random and valid [ISBN(International Standard Book Number)](https://en.wikipedia.org/wiki/International_Standard_Book_Number).
 
 ## Install

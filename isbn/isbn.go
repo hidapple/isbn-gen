@@ -27,7 +27,7 @@ type ISBN struct {
 func NewISBN(group, code string) (*ISBN, error) {
 	id := SearchIdentifier(group)
 	if id == nil {
-		return nil, fmt.Errorf("%q is not supported.", group)
+		return nil, fmt.Errorf("%q is not supported", group)
 	}
 	if !isNumber(code) {
 		return nil, fmt.Errorf("bookCode must be a number: %s", code)
@@ -77,9 +77,8 @@ func calcCheckDigit(isbn string) string {
 	calcResult := 10 - (sum % 10)
 	if calcResult == 10 {
 		return "0"
-	} else {
-		return strconv.Itoa(calcResult)
 	}
+	return strconv.Itoa(calcResult)
 }
 
 func isNumber(pubcode string) bool {
