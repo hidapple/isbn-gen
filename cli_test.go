@@ -51,7 +51,7 @@ func TestRun_listFlag(t *testing.T) {
 func TestRun_idGroupFlag(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
-	args := strings.Split("./isbn-gen --id-group en1", " ")
+	args := strings.Split("./isbn-gen --id-group en", " ")
 
 	status := cli.Run(args)
 
