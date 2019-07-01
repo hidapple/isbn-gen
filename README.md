@@ -36,7 +36,7 @@ Print supported ISBN registration group identifier list. Currently `isbn-gen` su
 +-------------------+--------------+--------+------------+
 | IDENTIFYING GROUP | ABBREVIATION | PREFIX | IDENTIFIER |
 +-------------------+--------------+--------+------------+
-| English1          | en1          |    978 |          0 |
+| English           | en           |    978 |          0 |
 | English2          | en2          |    978 |          1 |
 | French            | fr           |    978 |          2 |
 | German            | de           |    978 |          3 |

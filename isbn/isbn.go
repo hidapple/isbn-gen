@@ -30,7 +30,7 @@ func NewISBN(group, code string) (*ISBN, error) {
 		return nil, fmt.Errorf("%q is not supported", group)
 	}
 	if !isNumber(code) {
-		return nil, fmt.Errorf("bookCode must be a number: %s", code)
+		return nil, fmt.Errorf("code must be a number: %s", code)
 	}
 	if len(id.Prefix+id.Identifier+code) > 12 {
 		return nil, fmt.Errorf("code is too long: code=%s", code)

@@ -18,8 +18,8 @@ type Identifier struct {
 // Identifiers is list of ISBN identifer groups
 var Identifiers = []*Identifier{
 	{
-		GroupName:    "English1",
-		Abbreviation: "en1",
+		GroupName:    "English",
+		Abbreviation: "en",
 		Prefix:       "978",
 		Identifier:   "0",
 	},
