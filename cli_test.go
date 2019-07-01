@@ -61,7 +61,7 @@ func TestRun_idGroupFlag(t *testing.T) {
 	}
 
 	// Output ISBN should contain 9784(en1 prefix)
-	expected := fmt.Sprint("9780")
+	expected := "9780"
 	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, outStream.String())
 	}
@@ -87,7 +87,7 @@ func TestRun_codeFlag(t *testing.T) {
 	}
 
 	// Output ISBN should contain 9784(default prefix) + 04(pubcode)
-	expected := fmt.Sprint("978404")
+	expected := "978404"
 	if !strings.Contains(outStream.String(), expected) {
 		t.Fatalf("Expected output contain %q but was %q", expected, outStream.String())
 	}
@@ -97,5 +97,18 @@ func TestRun_codeFlag(t *testing.T) {
 	actualLength := len(strings.TrimRight(outStream.String(), "\n"))
 	if actualLength != expectedLength {
 		t.Fatalf("Expected output length is %d but was %d.", expectedLength, actualLength)
+	}
+}
+
+func TestRun_codeFlagTooLong(t *testing.T) {
+	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
+	cli := &CLI{outStream: outStream, errStream: errStream}
+	args := strings.Split("./isbn-gen --code 012345678", " ")
+
+	status := cli.Run(args)
+
+	// exitCode should be 0
+	if status != exitCodeErr {
+		t.Fatalf("Expected exit code is %d but was %d", exitCodeOK, status)
 	}
 }
