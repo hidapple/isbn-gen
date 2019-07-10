@@ -1,5 +1,5 @@
 NAME = "isbn-gen"
-VERSION = "v1.0.0"
+VERSION = "v1.0.1"
 COMMIT = $$(git describe --always)
 
 BUILD_FLAGS = -ldflags "-X main.Name=$(NAME) -X main.Version=$(VERSION) -X main.Revision=$(COMMIT)"
